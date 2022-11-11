@@ -10,6 +10,7 @@ import java.util.Set;
 public class Etc {
 
     @Column(name = "etc_id")
+    @Id @GeneratedValue
     private Long id;
 
     @ManyToOne

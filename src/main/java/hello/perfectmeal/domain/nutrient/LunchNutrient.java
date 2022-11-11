@@ -23,7 +23,7 @@ public class LunchNutrient {
     private Account account;
 
     @ManyToOne
-    @JoinTable
+    @JoinTable(name = "lunch")
     private Lunch lunch;
 
     @Embedded

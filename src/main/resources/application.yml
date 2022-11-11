@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    database-class-name: org.h2.Driver
+    url: jdbc:h2:tcp://localhost/~/perfectmeal
+    username: sa
+    password: 1111
+
+  jpa:
+    hibernate:
+      ddl-auto: create
