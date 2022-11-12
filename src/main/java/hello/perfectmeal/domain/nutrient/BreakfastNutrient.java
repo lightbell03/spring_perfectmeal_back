@@ -18,12 +18,12 @@ public class BreakfastNutrient {
     @Id @GeneratedValue
     private Long id;
 
-    @ManyToOne
-    @JoinTable(name = "account")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "account_id")
     private Account account;
 
     @ManyToOne
-    @JoinTable(name = "breakfast")
+    @JoinColumn(name = "breakfast_id")
     private Breakfast breakfast;
 
     @Embedded

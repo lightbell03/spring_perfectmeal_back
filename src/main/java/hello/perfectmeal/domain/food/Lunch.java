@@ -21,8 +21,8 @@ public class Lunch {
     @GeneratedValue
     private Long id;
 
-    @ManyToOne
-    @JoinTable(name = "account")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "account_id")
     private Account account;
 
     @ElementCollection

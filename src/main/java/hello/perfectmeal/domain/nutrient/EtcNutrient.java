@@ -12,12 +12,12 @@ public class EtcNutrient {
     @Id @GeneratedValue
     private Long id;
 
-    @ManyToOne
-    @JoinTable(name = "account")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "account_id")
     private Account account;
 
     @ManyToOne
-    @JoinTable(name = "etc")
+    @JoinColumn(name = "etc_id")
     private Etc etc;
 
     @Embedded
