@@ -39,7 +39,7 @@ public class AccountService {
         Authentication authentication = authenticationManager.authenticate(jwtAuthenticationToken);
         Account account = (Account) authentication.getPrincipal();
         String email = account.getEmail();
-        log.info("login email = {}", email);
+
         String accessToken = jwtTokenProvider.createAccessToken(email);
         String refreshToken = jwtTokenProvider.createRefreshToken(email);
 

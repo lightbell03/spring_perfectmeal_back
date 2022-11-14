@@ -3,8 +3,7 @@ package hello.perfectmeal.config.security.provider;
 import hello.perfectmeal.config.security.service.AccountContext;
 import hello.perfectmeal.config.security.token.JwtAuthenticationToken;
 import hello.perfectmeal.domain.jwt.dto.TokenDTO;
-import hello.perfectmeal.service.AccountDetailsService;
-import hello.perfectmeal.service.AccountService;
+import hello.perfectmeal.config.security.service.AccountDetailsService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -22,8 +21,7 @@ import java.util.Date;
 @Component
 public class JwtTokenProvider {
 
-    @Autowired
-    AccountDetailsService accountDetailsService;
+    @Autowired AccountDetailsService accountDetailsService;
     private final Long ACCESS_TOKEN_EXPIRE_TIME;
     private final Long REFRESH_TOKEN_EXPIRE_TIME;
     private final Key key;

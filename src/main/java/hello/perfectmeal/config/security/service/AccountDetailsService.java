@@ -1,4 +1,4 @@
-package hello.perfectmeal.service;
+package hello.perfectmeal.config.security.service;
 
 import hello.perfectmeal.config.security.service.AccountContext;
 import hello.perfectmeal.domain.account.Account;
