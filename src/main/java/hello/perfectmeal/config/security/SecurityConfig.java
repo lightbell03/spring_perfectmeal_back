@@ -2,6 +2,9 @@ package hello.perfectmeal.config.security;
 
 import hello.perfectmeal.config.security.filter.JwtAuthenticationFilter;
 import hello.perfectmeal.config.security.provider.JwtAuthenticationProvider;
+import hello.perfectmeal.config.security.provider.JwtTokenProvider;
+import hello.perfectmeal.config.security.service.AccountDetailsService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,8 +18,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
-
+    private final JwtTokenProvider jwtTokenProvider;
+    private final AccountDetailsService accountDetailsService;
     @Bean
     public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
@@ -33,11 +38,13 @@ public class SecurityConfig {
         http
                 .authorizeRequests()
                 .antMatchers("/api/auth/**").permitAll()
+                .antMatchers("/api/foods").permitAll()
+                .antMatchers("/api/foods/*").hasRole("USER")
                 .anyRequest().authenticated()
 
                 .and()
-                .authenticationProvider(new JwtAuthenticationProvider())
-                .addFilterBefore(new JwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+                .authenticationProvider(new JwtAuthenticationProvider(passwordEncoder(), accountDetailsService))
+                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
         ;
 
 

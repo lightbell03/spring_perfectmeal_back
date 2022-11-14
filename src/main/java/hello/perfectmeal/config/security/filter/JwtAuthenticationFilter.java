@@ -1,12 +1,14 @@
 package hello.perfectmeal.config.security.filter;
 
 import hello.perfectmeal.config.security.provider.JwtTokenProvider;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -18,15 +20,16 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 @Slf4j
+@RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    @Autowired
-    private JwtTokenProvider jwtTokenProvider;
+
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        log.info("path = {}", request.getRequestURI());
         if(request.getRequestURI().startsWith("/api/auth/")){
+            log.info("path = {}", request.getRequestURI());
             filterChain.doFilter(request, response);
         } else {
             String token = resolveHeader(request);
@@ -36,6 +39,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                 if (flag == 1) {
                     this.setAuthentication(token);
+
+                    filterChain.doFilter(request, response);
                 } else if (flag == 2) {
                     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
                     response.setStatus(HttpStatus.FORBIDDEN.value());

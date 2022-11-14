@@ -58,5 +58,4 @@ public class AccountService {
         Account saveAccount = accountRepository.save(account);
         return saveAccount.getEmail();
     }
-
 }

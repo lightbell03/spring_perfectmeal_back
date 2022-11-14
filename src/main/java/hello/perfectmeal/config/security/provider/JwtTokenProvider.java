@@ -10,6 +10,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -17,7 +18,7 @@ import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.Date;
-
+@Slf4j
 @Component
 public class JwtTokenProvider {
 
@@ -83,9 +84,7 @@ public class JwtTokenProvider {
         Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
         AccountContext accountContext = (AccountContext) accountDetailsService.loadUserByUsername(claims.getSubject());
 
-        AccountContext principle = new AccountContext(accountContext.getAccount(), "", null);
-
-        return new JwtAuthenticationToken(principle, "");
+        return new JwtAuthenticationToken(accountContext.getAccount(), "", accountContext.getAuthorities());
     }
 
     public TokenDTO createTokenDto(String accessToken, String refreshToken){

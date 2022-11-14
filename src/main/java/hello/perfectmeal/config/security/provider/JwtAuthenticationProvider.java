@@ -3,6 +3,7 @@ package hello.perfectmeal.config.security.provider;
 import hello.perfectmeal.config.security.service.AccountContext;
 import hello.perfectmeal.config.security.token.JwtAuthenticationToken;
 import hello.perfectmeal.config.security.service.AccountDetailsService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -14,11 +15,11 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class JwtAuthenticationProvider implements AuthenticationProvider {
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-    @Autowired private AccountDetailsService accountDetailsService;
+    private final PasswordEncoder passwordEncoder;
+    private final AccountDetailsService accountDetailsService;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -32,7 +33,7 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
             throw new CredentialsExpiredException("Not Match Password");
         }
 
-        return new JwtAuthenticationToken(accountContext.getAccount(), null);
+        return new JwtAuthenticationToken(accountContext.getAccount(), "", accountContext.getAuthorities());
     }
 
     @Override
