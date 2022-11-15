@@ -4,10 +4,8 @@ import hello.perfectmeal.domain.account.Account;
 import hello.perfectmeal.domain.food.Breakfast;
 import hello.perfectmeal.domain.food.Dinner;
 import hello.perfectmeal.domain.food.Lunch;
-import hello.perfectmeal.domain.food.dto.BreakfastDTO;
-import hello.perfectmeal.domain.food.dto.DinnerDTO;
+import hello.perfectmeal.domain.food.dto.FoodDTO;
 import hello.perfectmeal.domain.food.dto.FoodTodayDTO;
-import hello.perfectmeal.domain.food.dto.LunchDTO;
 import hello.perfectmeal.service.FoodService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,8 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Slf4j
 @Controller
@@ -38,43 +35,41 @@ public class FoodController {
         Lunch lunch = foodService.getTodayLunch(account);
         Dinner dinner = foodService.getTodayDinner(account);
 
-        FoodTodayDTO foodTodayDTO = FoodTodayDTO.of(BreakfastDTO.BreakfastToBreakfastDTOConvertor(breakfast), LunchDTO.LunchToLunchDTOConvertor(lunch), DinnerDTO.DinnerToDinnerDTOConvertor(dinner));
+        FoodTodayDTO foodTodayDTO = FoodTodayDTO.of(
+                FoodDTO.BreakfastToFoodDTOConvertor(breakfast),
+                FoodDTO.LunchToFoodDTOConvertor(lunch),
+                FoodDTO.DinnerToFoodDTOConvertor(dinner)
+        );
 
         return ResponseEntity.status(HttpStatus.OK).body(foodTodayDTO);
     }
 
-    @PostMapping("/api/foods/breakfast")
+    @PostMapping("/api/foods")
     public ResponseEntity saveBreakfast(
-            @RequestBody BreakfastDTO breakfastDTO
+            @RequestParam String type,
+            @RequestBody FoodDTO foodDto
     ) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Account account = (Account) authentication.getPrincipal();
-        Breakfast breakfast = foodService.saveBreakfastFood(account, breakfastDTO);
 
-        return ResponseEntity.status(HttpStatus.OK).body(BreakfastDTO.BreakfastToBreakfastDTOConvertor(breakfast));
-    }
+        if(type.equals("breakfast")) {
+            try {
+                Breakfast breakfast = foodService.saveBreakfastFood(account, foodDto);
 
-    @PostMapping("/api/foods/lunch")
-    public ResponseEntity saveLunch(
-            @RequestBody LunchDTO lunchDTO
-    ){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Account account = (Account) authentication.getPrincipal();
+                return ResponseEntity.ok().body(FoodDTO.BreakfastToFoodDTOConvertor(breakfast));
+            } catch (Exception e){
+                return ResponseEntity.internalServerError().build();
+            }
+        } else if(type.equals("lunch")){
+            Lunch lunch = foodService.saveLunch(account, foodDto);
 
-        Lunch lunch = foodService.saveLunch(account, lunchDTO);
+            return ResponseEntity.ok().body(FoodDTO.LunchToFoodDTOConvertor(lunch));
+        } else if(type.equals("dinner")){
+            Dinner dinner = foodService.saveDinner(account, foodDto);
 
-        return ResponseEntity.status(HttpStatus.OK).body(LunchDTO.LunchToLunchDTOConvertor(lunch));
-    }
+            return ResponseEntity.ok().body(FoodDTO.DinnerToFoodDTOConvertor(dinner));
+        }
 
-    @PostMapping("/api/foods/dinner")
-    public ResponseEntity saveDinner(
-            @RequestBody DinnerDTO dinnerDTO
-    ){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Account account = (Account) authentication.getPrincipal();
-
-        Dinner dinner = foodService.saveDinner(account, dinnerDTO);
-
-        return ResponseEntity.status(HttpStatus.OK).body(DinnerDTO.DinnerToDinnerDTOConvertor(dinner));
+        return ResponseEntity.badRequest().build();
     }
 }

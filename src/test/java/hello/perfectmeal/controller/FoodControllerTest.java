@@ -1,14 +1,11 @@
 package hello.perfectmeal.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hello.perfectmeal.config.security.provider.JwtTokenProvider;
 import hello.perfectmeal.domain.account.Account;
 import hello.perfectmeal.domain.account.Gender;
 import hello.perfectmeal.domain.account.dto.AccountSignupDTO;
-import hello.perfectmeal.domain.food.dto.BreakfastDTO;
-import hello.perfectmeal.domain.food.dto.DinnerDTO;
-import hello.perfectmeal.domain.food.dto.LunchDTO;
+import hello.perfectmeal.domain.food.dto.FoodDTO;
 import hello.perfectmeal.repository.AccountRepository;
 import hello.perfectmeal.service.AccountService;
 import hello.perfectmeal.service.FoodService;
@@ -19,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -27,13 +25,13 @@ import java.util.Set;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ActiveProfiles("test")
 @SpringBootTest
 @AutoConfigureMockMvc
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 class FoodControllerTest {
 
     @Autowired
@@ -78,68 +76,71 @@ class FoodControllerTest {
     @Test
     @DisplayName("save Breakfast")
     public void saveBreakfast() throws Exception {
-        BreakfastDTO breakfastDTO = new BreakfastDTO();
-        breakfastDTO.setBreakfast(foodSet);
+        FoodDTO foodDTO = new FoodDTO();
+        foodDTO.setFoodSet( foodSet);
 
-        mockMvc.perform(post("/api/foods/breakfast")
+        mockMvc.perform(post("/api/foods")
                         .header("Authorization", "Bearer:" + accessToken)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(breakfastDTO)))
+                        .param("type", "breakfast")
+                        .content(objectMapper.writeValueAsString(foodDTO)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("id").exists())
-                .andExpect(jsonPath("breakfast").exists())
+                .andExpect(jsonPath("foodSet").exists())
                 ;
     }
 
     @Test
     @DisplayName("save Lunch")
     public void saveLunch() throws Exception {
-        LunchDTO lunchDTO = new LunchDTO();
-        lunchDTO.setLunch(foodSet);
+        FoodDTO foodDTO = new FoodDTO();
+        foodDTO.setFoodSet(foodSet);
 
-        mockMvc.perform(post("/api/foods/lunch")
+        mockMvc.perform(post("/api/foods")
                         .header("Authorization", "Bearer:" + accessToken)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(lunchDTO)))
+                        .param("type", "lunch")
+                        .content(objectMapper.writeValueAsString(foodDTO)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("id").exists())
-                .andExpect(jsonPath("lunch").exists())
+                .andExpect(jsonPath("foodSet").exists())
         ;
     }
 
     @Test
     @DisplayName("save dinner")
     public void saveDinner() throws Exception {
-        DinnerDTO dinnerDTO = new DinnerDTO();
-        dinnerDTO.setDinner(foodSet);
+        FoodDTO foodDTO = new FoodDTO();
+        foodDTO.setFoodSet(foodSet);
 
-        mockMvc.perform(post("/api/foods/dinner")
+        mockMvc.perform(post("/api/foods")
                         .header("Authorization", "Bearer:" + accessToken)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(dinnerDTO)))
+                        .param("type", "dinner")
+                        .content(objectMapper.writeValueAsString(foodDTO)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("id").exists())
-                .andExpect(jsonPath("dinner").exists())
+                .andExpect(jsonPath("foodSet").exists())
         ;
     }
 
     @Test
     @DisplayName("get Today food")
     public void getTodayFood() throws Exception {
-        BreakfastDTO breakfastDTO = new BreakfastDTO();
-        breakfastDTO.setBreakfast(foodSet);
-        foodService.saveBreakfastFood(account, breakfastDTO);
+        FoodDTO breakfastFoodDTO = new FoodDTO();
+        breakfastFoodDTO.setFoodSet(foodSet);
+        foodService.saveBreakfastFood(account, breakfastFoodDTO);
 
-        LunchDTO lunchDTO = new LunchDTO();
-        lunchDTO.setLunch(foodSet);
-        foodService.saveLunch(account, lunchDTO);
+        FoodDTO lunchFoodDTO = new FoodDTO();
+        lunchFoodDTO.setFoodSet(foodSet);
+        foodService.saveLunch(account, lunchFoodDTO);
 
-        DinnerDTO dinnerDTO = new DinnerDTO();
-        dinnerDTO.setDinner(foodSet);
-        foodService.saveDinner(account, dinnerDTO);
+        FoodDTO dinnerFoodDTO = new FoodDTO();
+        dinnerFoodDTO.setFoodSet(foodSet);
+        foodService.saveDinner(account, dinnerFoodDTO);
 
         mockMvc.perform(get("/api/foods")
                 .header("Authorization", "Bearer:" + accessToken)
@@ -155,13 +156,13 @@ class FoodControllerTest {
     @Test
     @DisplayName("get Today Food with lunch = null")
     public void getTodayFoodWithLunchIsNull() throws Exception {
-        BreakfastDTO breakfastDTO = new BreakfastDTO();
-        breakfastDTO.setBreakfast(foodSet);
-        foodService.saveBreakfastFood(account, breakfastDTO);
+        FoodDTO breakfastFoodDTO = new FoodDTO();
+        breakfastFoodDTO.setFoodSet(foodSet);
+        foodService.saveBreakfastFood(account, breakfastFoodDTO);
 
-        DinnerDTO dinnerDTO = new DinnerDTO();
-        dinnerDTO.setDinner(foodSet);
-        foodService.saveDinner(account, dinnerDTO);
+        FoodDTO dinnerFoodDTO = new FoodDTO();
+        dinnerFoodDTO.setFoodSet(foodSet);
+        foodService.saveDinner(account, dinnerFoodDTO);
 
         mockMvc.perform(get("/api/foods")
                         .header("Authorization", "Bearer:" + accessToken)

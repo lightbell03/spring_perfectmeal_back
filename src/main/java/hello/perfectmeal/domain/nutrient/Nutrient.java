@@ -11,95 +11,95 @@ import javax.persistence.Embeddable;
 public class Nutrient {
 
     //식품 중량
-    private Double food_weight;
+    public double food_Weight = 0;
     //에너지(kcal)
-    private Double energy_Qy;
+    public double energy_Qy = 0;
     //수분(%)
-    private Double water_Qy;
+    public double water_Qy = 0;
     //단백(g)
-    private Double prot_Qy;
+    public double prot_Qy = 0;
     //지질(g)
-    private Double ntrfs_Qy;
+    public double ntrfs_Qy = 0;
     //회분(g)
-    private Double ashs_Qy;
+    public double ashs_Qy = 0;
     //탄수화물(g)
-    private Double carbohydrate_Qy;
+    public double carbohydrate_Qy = 0;
     //총 당류(g)
-    private Double sugar_Qy;
+    public double sugar_Qy = 0;
     //총 식이섬유(g)
-    private Double fibtg_Qy;
+    public double fibtg_Qy = 0;
     //총 아미노산(mg)
-    private Double aat19_Qy;
+    public double aat19_Qy = 0;
     //필수 아미노산(mg)
-    private Double aae10a_Qy;
+    public double aae10a_Qy = 0;
     //비필수 아미노산(mg)
-    private Double aane_Qy;
+    public double aane_Qy = 0;
     //총 지방산(g)
-    private Double fafref_Qy;
+    public double fafref_Qy = 0;
     //총 필수 지방산(g)
-    private Double faessf_Qy;
+    public double faessf_Qy = 0;
     //총 포화 지방산(g)
-    private Double fasatf_Qy;
+    public double fasatf_Qy = 0;
     //총 단일 불포화 지방산(g)
-    private Double famsf_Qy;
+    public double famsf_Qy = 0;
     //총 다중 불포화 지방산(g)
-    private Double fapuf_Qy;
+    public double fapuf_Qy = 0;
     //칼슘(mg)
-    private Double clci_Qy;
+    public double clci_Qy = 0;
     //철(mg)
-    private Double irn_Qy;
+    public double irn_Qy = 0;
     //마그네슘(mg)
-    private Double mg_Qy;
+    public double mg_Qy = 0;
     //인(mg)
-    private Double phph_Qy;
+    public double phph_Qy = 0;
     //칼륨(mg)
-    private Double ptss_Qy;
+    public double ptss_Qy = 0;
     //나트륨(mg)
-    private Double na_Qy;
+    public double na_Qy = 0;
     //아연(mg)
-    private Double zn_Qy;
+    public double zn_Qy = 0;
     //구리(mg)
-    private Double cu_Qy;
+    public double cu_Qy = 0;
     //망간(mg)
-    private Double mn_Qy;
+    public double mn_Qy = 0;
     //셀레늄(yg)
-    private Double se_Qy;
+    public double se_Qy = 0;
     //몰리브덴(yg)
-    private Double mo_Qy;
+    public double mo_Qy = 0;
     //요오드(yg)
-    private Double id_Qy;
+    public double id_Qy = 0;
     //레티놀(yg)
-    private Double rtnl_Qy;
+    public double rtnl_Qy = 0;
     //베타카로틴(yg)
-    private Double catn_Qy;
+    public double catn_Qy = 0;
     //비타민 D(D2+D3)(yg)
-    private Double vitd_Qy;
+    public double vitd_Qy = 0;
     //비타민 E(yg)
-    private Double vite_Qy;
+    public double vite_Qy = 0;
     //바타민 K1(yg)
-    private Double vitk1_Qy;
+    public double vitk1_Qy = 0;
     //비타민 B1(mg)
-    private Double vtmn_B1_Qy;
+    public double vtmn_B1_Qy = 0;
     //비타민 B2(mg)
-    private Double vtmn_B2_Qy;
+    public double vtmn_B2_Qy = 0;
     //니아신(mg)(mg)
-    private Double nacn_Qy;
+    public double nacn_Qy = 0;
     //판토텐산(비타민 B5)(mg)
-    private Double pantac_Qy;
+    public double pantac_Qy = 0;
     //비타민 B6 (mg)
-    private Double pyrxn_Qy;
+    public double pyrxn_Qy = 0;
     //비오틴(mg)
-    private Double biot_Qy;
+    public double biot_Qy = 0;
     //엽산(yg)
-    private Double fol_Qy;
+    public double fol_Qy = 0;
     //비타민 B12(yg)
-    private Double vitb12_Qy;
+    public double vitb12_Qy = 0;
     //비타민 C (mg)
-    private Double vtmn_C_Qy;
+    public double vtmn_C_Qy = 0;
     //콜레스테롤(mg)
-    private Double chole_Qy;
+    public double chole_Qy = 0;
     //식염상당량(g)
-    private Double nacl_Qy;
+    public double nacl_Qy = 0;
     //폐기율(%)
-    private Double ref_Qy;
+    public double ref_Qy = 0;
 }

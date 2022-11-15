@@ -3,19 +3,17 @@ package hello.perfectmeal.domain.food.dto;
 import hello.perfectmeal.domain.food.Breakfast;
 import lombok.Getter;
 
-import java.util.List;
-
 @Getter
 public class FoodTodayDTO {
-    private BreakfastDTO breakfast;
-    private LunchDTO lunch;
-    private DinnerDTO dinner;
+    private FoodDTO breakfast;
+    private FoodDTO lunch;
+    private FoodDTO dinner;
 
-    public static FoodTodayDTO of(BreakfastDTO breakfast, LunchDTO lunch, DinnerDTO dinner){
+    public static FoodTodayDTO of(FoodDTO breakfastFoodDTO, FoodDTO lunchFoodDTO, FoodDTO dinnerFoodDTO){
         FoodTodayDTO foodTodayDTO = new FoodTodayDTO();
-        foodTodayDTO.breakfast = breakfast;
-        foodTodayDTO.lunch = lunch;
-        foodTodayDTO.dinner = dinner;
+        foodTodayDTO.breakfast = breakfastFoodDTO;
+        foodTodayDTO.lunch = lunchFoodDTO;
+        foodTodayDTO.dinner = dinnerFoodDTO;
 
         return foodTodayDTO;
     }

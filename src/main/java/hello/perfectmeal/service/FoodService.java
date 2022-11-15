@@ -4,12 +4,11 @@ import hello.perfectmeal.domain.account.Account;
 import hello.perfectmeal.domain.food.Breakfast;
 import hello.perfectmeal.domain.food.Dinner;
 import hello.perfectmeal.domain.food.Lunch;
-import hello.perfectmeal.domain.food.dto.BreakfastDTO;
-import hello.perfectmeal.domain.food.dto.DinnerDTO;
-import hello.perfectmeal.domain.food.dto.LunchDTO;
-import hello.perfectmeal.repository.BreakfastRepository;
-import hello.perfectmeal.repository.DinnerRepository;
-import hello.perfectmeal.repository.LunchRepository;
+import hello.perfectmeal.domain.food.dto.FoodDTO;
+import hello.perfectmeal.domain.nutrient.BreakfastNutrient;
+import hello.perfectmeal.repository.food.BreakfastRepository;
+import hello.perfectmeal.repository.food.DinnerRepository;
+import hello.perfectmeal.repository.food.LunchRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,9 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
 
 @Controller
 @RequiredArgsConstructor
@@ -29,6 +25,7 @@ public class FoodService {
     private final BreakfastRepository breakfastRepository;
     private final LunchRepository lunchRepository;
     private final DinnerRepository dinnerRepository;
+    private final NutrientService nutrientService;
 
 
     public Breakfast getTodayBreakfast(Account account) {
@@ -51,21 +48,24 @@ public class FoodService {
     }
 
     @Transactional
-    public Breakfast saveBreakfastFood(Account account, BreakfastDTO breakfastDTO) {
+    public Breakfast saveBreakfastFood(Account account, FoodDTO foodDTO) throws Exception {
         Breakfast breakfast = Breakfast.builder()
-                .foodSet(breakfastDTO.getBreakfast())
+                .foodSet(foodDTO.getFoodSet())
                 .date(LocalDateTime.now())
                 .account(account)
                 .build();
+        Breakfast saveBreakfast = breakfastRepository.save(breakfast);
 
-        return breakfastRepository.save(breakfast);
+        BreakfastNutrient breakfastNutrient = nutrientService.saveBreakfastNutrient(account, saveBreakfast);
+
+        return saveBreakfast;
     }
 
     @Transactional
-    public Lunch saveLunch(Account account, LunchDTO lunchDTO) {
+    public Lunch saveLunch(Account account, FoodDTO foodDTO) {
 
         Lunch lunch = Lunch.builder()
-                .foodSet(lunchDTO.getLunch())
+                .foodSet(foodDTO.getFoodSet())
                 .date(LocalDateTime.now())
                 .account(account)
                 .build();
@@ -74,9 +74,9 @@ public class FoodService {
     }
 
     @Transactional
-    public Dinner saveDinner(Account account, DinnerDTO dinnerDTO){
+    public Dinner saveDinner(Account account, FoodDTO foodDTO){
         Dinner dinner = Dinner.builder()
-                .foodSet(dinnerDTO.getDinner())
+                .foodSet(foodDTO.getFoodSet())
                 .date(LocalDateTime.now())
                 .account(account)
                 .build();

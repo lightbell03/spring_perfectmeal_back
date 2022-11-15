@@ -5,7 +5,6 @@ import hello.perfectmeal.config.security.token.JwtAuthenticationToken;
 import hello.perfectmeal.config.security.service.AccountDetailsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.CredentialsExpiredException;
 import org.springframework.security.core.Authentication;

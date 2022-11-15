@@ -1,4 +1,4 @@
-package hello.perfectmeal.repository;
+package hello.perfectmeal.repository.food;
 
 import hello.perfectmeal.domain.account.Account;
 import hello.perfectmeal.domain.food.Lunch;
