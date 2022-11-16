@@ -25,5 +25,10 @@ public class Etc {
     joinColumns = @JoinColumn(name = "etc_id"))
     private Set<String> etcSet;
 
+//    @ElementCollection
+//    @CollectionTable(name = "breakfast_food_photo_path",
+//            joinColumns = @JoinColumn(name = "breakfast_id"))
+//    private String imagePath;
+
     private LocalDateTime date;
 }

@@ -32,5 +32,10 @@ public class Dinner {
     joinColumns = @JoinColumn(name = "dinner_id"))
     private Set<String> foodSet = new HashSet<>();
 
+//    @ElementCollection
+//    @CollectionTable(name = "breakfast_food_photo_path",
+//            joinColumns = @JoinColumn(name = "breakfast_id"))
+//    private String imagePath;
+
     private LocalDateTime date;
 }
