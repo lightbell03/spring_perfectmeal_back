@@ -1,28 +1,18 @@
-import sys, os, io, base64
-import subprocess
-from IPython.display import Image
+import base64, io, sys
+from PIL import Image
+import torch
 
-sys.stdout = io.TextIOWrapper(sys.stdout.detach(), encoding = 'utf-8')
 sys.stderr = io.TextIOWrapper(sys.stderr.detach(), encoding = 'utf-8')
 
-def main():
-    imgString = sys.stdin.read()
-    imgData = base64.b64decode(imgString)
-    file = './images/test.jpg'
+base64String = sys.stdin.read()
 
-    with open(file, 'wb') as f:
-        f.write(imgData);
+imgdata = base64.b64decode(base64String)
+dataBytesIO = io.BytesIO(imgdata)
+image = Image.open(dataBytesIO)
 
-    val_img_path = './images/test.jpg'
-    ##sys.argv = ['--weights', './detect/k_v5m_epochs50_data20_img640.pt', '--img', 640, '--conf', 0.1, '--source', "{val_img_path}"];
-    ##exec('detect.py');
-    out = subprocess.call([sys.executable, './yolov5/detect.py', '--weights', './routes/k_v5m_epochs50_data20_img640.pt', '--img', '640', '--conf', '0.1', '--source', val_img_path])
-    #tmp = Image(os.path.join('./detect', os.path.basename(val_img_path)))
-    
-    #print(out)
-    print('감자')
-    print('고구마맛탕')
-    print('햄버거')
-
-if __name__ == '__main__':
-    main()
+# Model
+model = torch.hub.load('ultralytics/yolov5', 'yolov5s', _verbose=False)
+# # # Inference
+results = model([image], size=640) # batch of images
+print("Test")
+print(results)

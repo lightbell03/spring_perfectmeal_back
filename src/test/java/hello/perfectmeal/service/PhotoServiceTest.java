@@ -26,7 +26,7 @@ class PhotoServiceTest {
     @Test
     @DisplayName("python execute test")
     public void pyExec() throws Exception {
-        File file = new File(System.getProperty("user.dir") + "/testimage/testImage.jpg");
+        File file = new File(System.getProperty("user.dir") + "/testimage/image.jpg");
         FileInputStream fileInputStream = new FileInputStream(file);
         byte[] bytes = new byte[(int) file.length()];
         fileInputStream.read(bytes);
