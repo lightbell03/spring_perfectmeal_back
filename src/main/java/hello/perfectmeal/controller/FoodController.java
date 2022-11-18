@@ -6,7 +6,11 @@ import hello.perfectmeal.domain.food.Dinner;
 import hello.perfectmeal.domain.food.Lunch;
 import hello.perfectmeal.domain.food.dto.FoodDTO;
 import hello.perfectmeal.domain.food.dto.FoodTodayDTO;
+import hello.perfectmeal.domain.nutrient.BreakfastNutrient;
+import hello.perfectmeal.domain.nutrient.DinnerNutrient;
+import hello.perfectmeal.domain.nutrient.LunchNutrient;
 import hello.perfectmeal.service.FoodService;
+import hello.perfectmeal.service.NutrientService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -25,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class FoodController {
 
     private final FoodService foodService;
+    private final NutrientService nutrientService;
 
     @GetMapping("/api/foods")
     public ResponseEntity getFood() {
@@ -32,14 +37,16 @@ public class FoodController {
         Account account = (Account) authentication.getPrincipal();
 
         Breakfast breakfast = foodService.getTodayBreakfast(account);
+        BreakfastNutrient breakfastNutrient = nutrientService.getBreakfastNutrient(account, breakfast);
         Lunch lunch = foodService.getTodayLunch(account);
+        LunchNutrient lunchNutrient = nutrientService.getLunchNutrient(account, lunch);
         Dinner dinner = foodService.getTodayDinner(account);
+        DinnerNutrient dinnerNutrient = nutrientService.getDinnerNutrient(account, dinner);
 
-        FoodTodayDTO foodTodayDTO = FoodTodayDTO.of(
-                FoodDTO.BreakfastToFoodDTOConvertor(breakfast),
-                FoodDTO.LunchToFoodDTOConvertor(lunch),
-                FoodDTO.DinnerToFoodDTOConvertor(dinner)
-        );
+        FoodTodayDTO foodTodayDTO = FoodTodayDTO.of()
+                .food(breakfast, lunch, dinner)
+                .nutrient(breakfastNutrient, lunchNutrient, dinnerNutrient)
+                .build();
 
         return ResponseEntity.status(HttpStatus.OK).body(foodTodayDTO);
     }

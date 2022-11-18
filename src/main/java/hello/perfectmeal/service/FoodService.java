@@ -19,7 +19,7 @@ import java.time.LocalTime;
 
 @Controller
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional
 public class FoodService {
 
     private final BreakfastRepository breakfastRepository;
@@ -29,15 +29,18 @@ public class FoodService {
 
 
     public Breakfast getTodayBreakfast(Account account) {
-        return breakfastRepository.findByAccountAndDateBetween(account, getStartTime(), getEndTime()).orElse(null);
+        return breakfastRepository.findByAccountAndDateBetween(account, getStartTime(), getEndTime())
+                .orElse(null);
     }
 
     public Lunch getTodayLunch(Account account) {
-        return lunchRepository.findByAccountAndDateBetween(account, getStartTime(), getEndTime()).orElse(null);
+        return lunchRepository.findByAccountAndDateBetween(account, getStartTime(), getEndTime())
+                .orElse(null);
     }
 
     public Dinner getTodayDinner(Account account) {
-        return dinnerRepository.findByAccountAndDateBetween(account, getStartTime(), getEndTime()).orElse(null);
+        return dinnerRepository.findByAccountAndDateBetween(account, getStartTime(), getEndTime())
+                .orElse(null);
     }
 
     private LocalDateTime getStartTime(){

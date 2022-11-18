@@ -24,7 +24,7 @@ public class Breakfast {
     @GeneratedValue
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "account_id")
     private Account account;
 
@@ -33,11 +33,6 @@ public class Breakfast {
     @CollectionTable(name = "breakfast_food",
             joinColumns = @JoinColumn(name = "breakfast_id"))
     private Set<String> foodSet = new HashSet<>();
-
-//    @ElementCollection
-//    @CollectionTable(name = "breakfast_food_photo_path",
-//            joinColumns = @JoinColumn(name = "breakfast_id"))
-//    private String imagePath;
 
     private LocalDateTime date;
 }

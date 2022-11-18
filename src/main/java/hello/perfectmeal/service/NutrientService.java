@@ -144,4 +144,19 @@ public class NutrientService {
             return null;
         return Double.valueOf(nValue.getNodeValue());
     }
+
+    public BreakfastNutrient getBreakfastNutrient(Account account, Breakfast breakfast){
+        return breakfastNutrientRepository.findByAccountAndBreakfast(account, breakfast)
+                .orElse(null);
+    }
+
+    public LunchNutrient getLunchNutrient(Account account, Lunch lunch){
+        return lunchNutrientRepository.findByAccountAndLunch(account, lunch)
+                .orElse(null);
+    }
+
+    public DinnerNutrient getDinnerNutrient(Account account, Dinner dinner){
+        return dinnerNutrientRepository.findByAccountAndDinner(account, dinner)
+                .orElse(null);
+    }
 }
