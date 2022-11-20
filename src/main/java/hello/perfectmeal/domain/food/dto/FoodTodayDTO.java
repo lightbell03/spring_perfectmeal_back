@@ -20,47 +20,18 @@ public class FoodTodayDTO {
     private Nutrient lunchNutrient;
     private Nutrient dinnerNutrient;
 
-    private FoodTodayDTO(Convertor convertor){
-        this.breakfast = convertor.breakfast;
-        this.lunch = convertor.lunch;
-        this.dinner = convertor.dinner;
+    public static FoodTodayDTO of(Breakfast breakfast, Lunch lunch, Dinner dinner) {
+        FoodTodayDTO foodTodayDTO = new FoodTodayDTO();
+        foodTodayDTO.breakfast = breakfast == null ? null : breakfast.getFoodSet();
+        foodTodayDTO.breakfastNutrient = breakfast == null ? null : breakfast.getBreakfastNutrient().getNutrient();
 
-        this.breakfastNutrient = convertor.breakfastNutrient;
-        this.lunchNutrient = convertor.lunchNutrient;
-        this.dinnerNutrient = convertor.dinnerNutrient;
-    }
+        foodTodayDTO.lunch = lunch == null ? null : lunch.getFoodSet();
+        foodTodayDTO.lunchNutrient = lunch == null ? null : lunch.getLunchNutrient().getNutrient();
 
-    public static Convertor of() {
-        return new Convertor();
-    }
+        foodTodayDTO.dinner = dinner == null ? null : dinner.getFoodSet();
+        foodTodayDTO.dinnerNutrient = dinner == null ? null : dinner.getDinnerNutrient().getNutrient();
 
-    public static class Convertor {
-        private Set<String> breakfast;
-        private Set<String> lunch;
-        private Set<String> dinner;
-        private Nutrient breakfastNutrient;
-        private Nutrient lunchNutrient;
-        private Nutrient dinnerNutrient;
-
-        public Convertor food(Breakfast breakfast, Lunch lunch, Dinner dinner) {
-            this.breakfast = breakfast == null ? null : breakfast.getFoodSet();
-            this.lunch= lunch == null ? null : lunch.getFoodSet();
-            this.dinner = dinner == null ? null : dinner.getFoodSet();
-
-            return this;
-        }
-
-        public Convertor nutrient(BreakfastNutrient breakfastNutrient, LunchNutrient lunchNutrient, DinnerNutrient dinnerNutrient) {
-            this.breakfastNutrient = breakfastNutrient == null ? null : breakfastNutrient.getNutrient();
-            this.lunchNutrient = lunchNutrient == null ? null : lunchNutrient.getNutrient();
-            this.dinnerNutrient = dinnerNutrient == null ? null : dinnerNutrient.getNutrient();
-
-            return this;
-        }
-
-        public FoodTodayDTO build() {
-            return new FoodTodayDTO(this);
-        }
+        return foodTodayDTO;
     }
 
 }

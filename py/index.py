@@ -12,7 +12,8 @@ image = Image.open(dataBytesIO)
 
 # Model
 model = torch.hub.load('ultralytics/yolov5', 'yolov5s', _verbose=False)
-# # # Inference
+# Inference
 results = model([image], size=640) # batch of images
-print("Test")
-print(results)
+# print(results)
+
+print("감자")

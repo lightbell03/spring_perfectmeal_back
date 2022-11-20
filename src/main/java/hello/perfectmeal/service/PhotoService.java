@@ -2,7 +2,9 @@ package hello.perfectmeal.service;
 
 import hello.perfectmeal.domain.food.dto.PhotoDTO;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -11,11 +13,12 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PhotoService {
     public Set<String> analyzePhoto(PhotoDTO photoDTO) throws Exception {
-        String base64String = photoDTO.getImgsource().split(",")[1];
+        String base64String = photoDTO.getImgsource();
 
         ProcessBuilder processBuilder = new ProcessBuilder("python3", System.getProperty("user.dir")+"/py/index.py");
         Process process = processBuilder.start();
@@ -37,7 +40,11 @@ public class PhotoService {
 
         for(String result : outputList){
             if(result.startsWith("image")){
+                if(result.contains("no detection")){
+                    return foodSet;
+                }
                 String[] strings = result.split(" ");
+
                 for(int i=4; i<strings.length; i+=2){
                     StringBuilder stringBuilder = new StringBuilder(strings[i]).delete(strings[i].length() - 1, strings[i].length());
                     foodSet.add(stringBuilder.toString());

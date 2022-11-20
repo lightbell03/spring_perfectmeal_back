@@ -10,22 +10,24 @@ import hello.perfectmeal.repository.food.BreakfastRepository;
 import hello.perfectmeal.repository.food.DinnerRepository;
 import hello.perfectmeal.repository.food.LunchRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
-@Controller
+@Slf4j
+@Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class FoodService {
 
     private final BreakfastRepository breakfastRepository;
     private final LunchRepository lunchRepository;
     private final DinnerRepository dinnerRepository;
-    private final NutrientService nutrientService;
 
 
     public Breakfast getTodayBreakfast(Account account) {
@@ -58,8 +60,6 @@ public class FoodService {
                 .account(account)
                 .build();
         Breakfast saveBreakfast = breakfastRepository.save(breakfast);
-
-        BreakfastNutrient breakfastNutrient = nutrientService.saveBreakfastNutrient(account, saveBreakfast);
 
         return saveBreakfast;
     }

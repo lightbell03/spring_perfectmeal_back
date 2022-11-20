@@ -15,10 +15,12 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Slf4j
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 @Service
 public class AccountService {
 
@@ -39,6 +41,7 @@ public class AccountService {
         return jwtTokenProvider.createTokenDto(accessToken, refreshToken);
     }
 
+    @Transactional
     public String signup(AccountSignupDTO accountSignupDTO) {
         Account account = Account.builder()
                 .name(accountSignupDTO.getName())

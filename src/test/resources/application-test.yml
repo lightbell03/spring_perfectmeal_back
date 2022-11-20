@@ -1,5 +1,9 @@
 spring:
-  datasource: jdbc:h2:mem:test
+  datasource: jdbc:h2:tcp://localhost/~/perfectmeal
   username: sa
-  password:
+  password: 1111
   driver-class-name: org.h2.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: create

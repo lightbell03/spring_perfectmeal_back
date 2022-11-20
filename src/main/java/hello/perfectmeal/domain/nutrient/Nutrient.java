@@ -1,8 +1,11 @@
 package hello.perfectmeal.domain.nutrient;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 @Embeddable
@@ -11,95 +14,187 @@ import javax.persistence.Embeddable;
 public class Nutrient {
 
     //식품 중량
-    public double food_Weight = 0;
+    @Column(name = "food_Weight")
+    @ColumnDefault("0")
+    public double food_Weight;
     //에너지(kcal)
-    public double energy_Qy = 0;
+    @Column(name = "energy_Qy")
+    @ColumnDefault("0")
+    public double energy_Qy;
     //수분(%)
-    public double water_Qy = 0;
-    //단백(g)
-    public double prot_Qy = 0;
+    @Column(name = "water_Qy")
+    @ColumnDefault("0")
+    public double water_Qy;
+    //단백질(g)
+    @Column(name = "prot_Qy")
+    @ColumnDefault("0")
+    public double prot_Qy;
     //지질(g)
-    public double ntrfs_Qy = 0;
+    @Column(name = "ntrfs_Qy")
+    @ColumnDefault("0")
+    public double ntrfs_Qy;
     //회분(g)
-    public double ashs_Qy = 0;
+    @Column(name = "ashs_Qy")
+    @ColumnDefault("0")
+    public double ashs_Qy;
     //탄수화물(g)
-    public double carbohydrate_Qy = 0;
+    @Column(name = "carbohydrate_Qy")
+    @ColumnDefault("0")
+    public double carbohydrate_Qy;
     //총 당류(g)
-    public double sugar_Qy = 0;
+    @Column(name = "sugar_Qy")
+    @ColumnDefault("0")
+    public double sugar_Qy;
     //총 식이섬유(g)
-    public double fibtg_Qy = 0;
+    @Column(name = "fibtg_Qy")
+    @ColumnDefault("0")
+    public double fibtg_Qy;
     //총 아미노산(mg)
-    public double aat19_Qy = 0;
+    @Column(name = "aat19_Qy")
+    @ColumnDefault("0")
+    public double aat19_Qy;
     //필수 아미노산(mg)
-    public double aae10a_Qy = 0;
+    @Column(name = "aae10a_Qy")
+    @ColumnDefault("0")
+    public double aae10a_Qy;
     //비필수 아미노산(mg)
-    public double aane_Qy = 0;
+    @Column(name = "aane_Qy")
+    @ColumnDefault("0")
+    public double aane_Qy;
     //총 지방산(g)
-    public double fafref_Qy = 0;
+    @Column(name = "fafref_Qy")
+    @ColumnDefault("0")
+    public double fafref_Qy;
     //총 필수 지방산(g)
-    public double faessf_Qy = 0;
+    @Column(name = "faessf_Qy")
+    @ColumnDefault("0")
+    public double faessf_Qy;
     //총 포화 지방산(g)
-    public double fasatf_Qy = 0;
+    @Column(name = "fasatf_Qy")
+    @ColumnDefault("0")
+    public double fasatf_Qy;
     //총 단일 불포화 지방산(g)
-    public double famsf_Qy = 0;
+    @Column(name = "famsf_Qy")
+    @ColumnDefault("0")
+    public double famsf_Qy;
     //총 다중 불포화 지방산(g)
-    public double fapuf_Qy = 0;
+    @Column(name = "fapuf_Qy")
+    @ColumnDefault("0")
+    public double fapuf_Qy;
     //칼슘(mg)
-    public double clci_Qy = 0;
+    @Column(name = "clci_Qy")
+    @ColumnDefault("0")
+    public double clci_Qy;
     //철(mg)
-    public double irn_Qy = 0;
+    @Column(name = "irn_Qy")
+    @ColumnDefault("0")
+    public double irn_Qy;
     //마그네슘(mg)
-    public double mg_Qy = 0;
+    @Column(name = "mg_Qy")
+    @ColumnDefault("0")
+    public double mg_Qy;
     //인(mg)
-    public double phph_Qy = 0;
+    @Column(name = "phph_Qy")
+    @ColumnDefault("0")
+    public double phph_Qy;
     //칼륨(mg)
-    public double ptss_Qy = 0;
+    @Column(name = "ptss_Qy")
+    @ColumnDefault("0")
+    public double ptss_Qy;
     //나트륨(mg)
-    public double na_Qy = 0;
+    @Column(name = "na_Qy")
+    @ColumnDefault("0")
+    public double na_Qy;
     //아연(mg)
-    public double zn_Qy = 0;
+    @Column(name = "zn_Qy")
+    @ColumnDefault("0")
+    public double zn_Qy;
     //구리(mg)
-    public double cu_Qy = 0;
+    @Column(name = "cu_Qy")
+    @ColumnDefault("0")
+    public double cu_Qy;
     //망간(mg)
-    public double mn_Qy = 0;
+    @Column(name = "mn_Qy")
+    @ColumnDefault("0")
+    public double mn_Qy;
     //셀레늄(yg)
-    public double se_Qy = 0;
+    @Column(name = "se_Qy")
+    @ColumnDefault("0")
+    public double se_Qy;
     //몰리브덴(yg)
-    public double mo_Qy = 0;
+    @Column(name = "mo_Qy")
+    @ColumnDefault("0")
+    public double mo_Qy;
     //요오드(yg)
-    public double id_Qy = 0;
+    @Column(name = "id_Qy")
+    @ColumnDefault("0")
+    public double id_Qy;
     //레티놀(yg)
-    public double rtnl_Qy = 0;
+    @Column(name = "rtnl_Qy")
+    @ColumnDefault("0")
+    public double rtnl_Qy;
     //베타카로틴(yg)
-    public double catn_Qy = 0;
+    @Column(name = "catn_Qy")
+    @ColumnDefault("0")
+    public double catn_Qy;
     //비타민 D(D2+D3)(yg)
-    public double vitd_Qy = 0;
+    @Column(name = "vitd_Qy")
+    @ColumnDefault("0")
+    public double vitd_Qy;
     //비타민 E(yg)
-    public double vite_Qy = 0;
+    @Column(name = "vite_Qy")
+    @ColumnDefault("0")
+    public double vite_Qy;
     //바타민 K1(yg)
-    public double vitk1_Qy = 0;
+    @Column(name = "vitk1_Qy")
+    @ColumnDefault("0")
+    public double vitk1_Qy;
     //비타민 B1(mg)
-    public double vtmn_B1_Qy = 0;
+    @Column(name = "vtmn_B1_Qy")
+    @ColumnDefault("0")
+    public double vtmn_B1_Qy;
     //비타민 B2(mg)
-    public double vtmn_B2_Qy = 0;
+    @Column(name = "vtmn_B2_Qy")
+    @ColumnDefault("0")
+    public double vtmn_B2_Qy;
     //니아신(mg)(mg)
-    public double nacn_Qy = 0;
+    @Column(name = "nacn_Qy")
+    @ColumnDefault("0")
+    public double nacn_Qy;
     //판토텐산(비타민 B5)(mg)
-    public double pantac_Qy = 0;
+    @Column(name = "pantac_Qy")
+    @ColumnDefault("0")
+    public double pantac_Qy;
     //비타민 B6 (mg)
-    public double pyrxn_Qy = 0;
+    @Column(name = "pyrxn_Qy")
+    @ColumnDefault("0")
+    public double pyrxn_Qy;
     //비오틴(mg)
-    public double biot_Qy = 0;
+    @Column(name = "biot_Qy")
+    @ColumnDefault("0")
+    public double biot_Qy;
     //엽산(yg)
-    public double fol_Qy = 0;
+    @Column(name = "fol_Qy")
+    @ColumnDefault("0")
+    public double fol_Qy;
     //비타민 B12(yg)
-    public double vitb12_Qy = 0;
+    @Column(name = "vitb12_Qy")
+    @ColumnDefault("0")
+    public double vitb12_Qy;
     //비타민 C (mg)
-    public double vtmn_C_Qy = 0;
+    @Column(name = "vtmn_C_Qy")
+    @ColumnDefault("0")
+    public double vtmn_C_Qy;
     //콜레스테롤(mg)
-    public double chole_Qy = 0;
+    @Column(name = "chole_Qy")
+    @ColumnDefault("0")
+    public double chole_Qy;
     //식염상당량(g)
-    public double nacl_Qy = 0;
+    @Column(name = "nacl_Qy")
+    @ColumnDefault("0")
+    public double nacl_Qy;
     //폐기율(%)
-    public double ref_Qy = 0;
+    @Column(name = "ref_Qy")
+    @ColumnDefault("0")
+    public double ref_Qy;
 }

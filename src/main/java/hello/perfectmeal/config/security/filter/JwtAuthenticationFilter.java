@@ -30,7 +30,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
         } else {
             String token = resolveHeader(request);
-            log.info("access tokne = {}", token);
             if(StringUtils.hasText(token)) {
                 int flag = jwtTokenProvider.validateToken(token);
 

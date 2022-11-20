@@ -1,6 +1,8 @@
 package hello.perfectmeal.domain.food;
 
 import hello.perfectmeal.domain.account.Account;
+import hello.perfectmeal.domain.nutrient.BreakfastNutrient;
+import hello.perfectmeal.domain.nutrient.EtcNutrient;
 import lombok.Builder;
 
 import javax.persistence.*;
@@ -15,7 +17,7 @@ public class Etc {
     @Id @GeneratedValue
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id")
     private Account account;
 
@@ -25,10 +27,12 @@ public class Etc {
     joinColumns = @JoinColumn(name = "etc_id"))
     private Set<String> etcSet;
 
-//    @ElementCollection
-//    @CollectionTable(name = "breakfast_food_photo_path",
-//            joinColumns = @JoinColumn(name = "breakfast_id"))
-//    private String imagePath;
+    @OneToOne(mappedBy = "etc", cascade = CascadeType.ALL, orphanRemoval = true)
+    private EtcNutrient etcNutrient;
 
     private LocalDateTime date;
+
+    public void setEtcNutrient(EtcNutrient etcNutrient) {
+        this.etcNutrient = etcNutrient;
+    }
 }

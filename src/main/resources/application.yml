@@ -1,11 +1,17 @@
 spring:
   datasource:
-    database-class-name: org.h2.Driver
-    url: jdbc:h2:tcp://localhost/~/perfectmeal
-    username: sa
-    password: 1111
+#    database-class-name: org.h2.Driver
+#    url: jdbc:h2:tcp://localhost/~/perfectmeal
+#    username: sa
+#    password: 1111
+    database-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/perfectmeal
+    username: root
+    password: bell1234
 
   jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
       ddl-auto: create
 

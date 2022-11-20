@@ -1,6 +1,7 @@
 package hello.perfectmeal.domain.food;
 
 import hello.perfectmeal.domain.account.Account;
+import hello.perfectmeal.domain.nutrient.BreakfastNutrient;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,7 +25,7 @@ public class Breakfast {
     @GeneratedValue
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id")
     private Account account;
 
@@ -34,5 +35,12 @@ public class Breakfast {
             joinColumns = @JoinColumn(name = "breakfast_id"))
     private Set<String> foodSet = new HashSet<>();
 
+    @OneToOne(mappedBy = "breakfast", cascade = CascadeType.ALL, orphanRemoval = true)
+    private BreakfastNutrient breakfastNutrient;
+
     private LocalDateTime date;
+
+    public void setBreakfastNutrient(BreakfastNutrient breakfastNutrient){
+        this.breakfastNutrient = breakfastNutrient;
+    }
 }

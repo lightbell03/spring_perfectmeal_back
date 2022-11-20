@@ -53,8 +53,8 @@ class FoodServiceTest {
         account = accountRepository.findByEmail(email).get();
 
         set.add("감자");
-        set.add("김치찌개");
-        set.add("햄버거");
+//        set.add("김치찌개");
+//        set.add("햄버거");
     }
 
     @Test

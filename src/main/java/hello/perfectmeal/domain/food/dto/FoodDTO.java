@@ -3,6 +3,7 @@ package hello.perfectmeal.domain.food.dto;
 import hello.perfectmeal.domain.food.Breakfast;
 import hello.perfectmeal.domain.food.Dinner;
 import hello.perfectmeal.domain.food.Lunch;
+import hello.perfectmeal.domain.nutrient.Nutrient;
 import lombok.*;
 
 import java.util.Set;
@@ -16,12 +17,18 @@ public class FoodDTO {
 
     private Long id;
     private Set<String> foodSet;
+    private Nutrient nutrient;
+    private Nutrient totalNutrient;
+    private Nutrient underNutrient;
 
-    public static FoodDTO BreakfastToFoodDTOConvertor(Breakfast breakfast){
+    public static FoodDTO BreakfastToFoodDTOConvertor(Breakfast breakfast, Nutrient totalNutrient){
         if(breakfast == null) return null;
+
         FoodDTO foodDTO = new FoodDTO();
         foodDTO.id = breakfast.getId();
         foodDTO.foodSet = breakfast.getFoodSet();
+        foodDTO.nutrient = breakfast.getBreakfastNutrient().getNutrient();
+        foodDTO.totalNutrient = totalNutrient;
 
         return foodDTO;
     }
@@ -31,7 +38,7 @@ public class FoodDTO {
         FoodDTO foodDTO = new FoodDTO();
         foodDTO.id = lunch.getId();
         foodDTO.foodSet = lunch.getFoodSet();
-
+        foodDTO.nutrient = lunch.getLunchNutrient().getNutrient();
         return foodDTO;
     }
 
@@ -40,7 +47,7 @@ public class FoodDTO {
         FoodDTO foodDTO = new FoodDTO();
         foodDTO.id = dinner.getId();
         foodDTO.foodSet = dinner.getFoodSet();
-
+        foodDTO.nutrient = dinner.getDinnerNutrient().getNutrient();
         return foodDTO;
     }
 }
