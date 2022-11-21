@@ -19,8 +19,10 @@ public class FoodTodayDTO {
     private Nutrient breakfastNutrient;
     private Nutrient lunchNutrient;
     private Nutrient dinnerNutrient;
+    private Nutrient totalNutrient;
+    private Nutrient underNutrient;
 
-    public static FoodTodayDTO of(Breakfast breakfast, Lunch lunch, Dinner dinner) {
+    public static FoodTodayDTO of(Breakfast breakfast, Lunch lunch, Dinner dinner, Nutrient totalNutrient, Nutrient underNutrient) {
         FoodTodayDTO foodTodayDTO = new FoodTodayDTO();
         foodTodayDTO.breakfast = breakfast == null ? null : breakfast.getFoodSet();
         foodTodayDTO.breakfastNutrient = breakfast == null ? null : breakfast.getBreakfastNutrient().getNutrient();
@@ -30,6 +32,9 @@ public class FoodTodayDTO {
 
         foodTodayDTO.dinner = dinner == null ? null : dinner.getFoodSet();
         foodTodayDTO.dinnerNutrient = dinner == null ? null : dinner.getDinnerNutrient().getNutrient();
+
+        foodTodayDTO.totalNutrient = totalNutrient;
+        foodTodayDTO.underNutrient = underNutrient;
 
         return foodTodayDTO;
     }

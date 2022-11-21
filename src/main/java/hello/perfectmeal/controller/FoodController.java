@@ -37,13 +37,12 @@ public class FoodController {
         Account account = (Account) authentication.getPrincipal();
 
         Breakfast breakfast = foodService.getTodayBreakfast(account);
-        BreakfastNutrient breakfastNutrient = nutrientService.saveBreakfastNutrient(account, breakfast);
-        breakfast.setBreakfastNutrient(breakfastNutrient);
-
         Lunch lunch = foodService.getTodayLunch(account);
         Dinner dinner = foodService.getTodayDinner(account);
+        Nutrient totalNutrient = nutrientService.getTodayTotalNutrient(account);
+        Nutrient underNutrient = nutrientService.getUnderNutrient(account, totalNutrient);
 
-        FoodTodayDTO foodTodayDTO = FoodTodayDTO.of(breakfast, lunch, dinner);
+        FoodTodayDTO foodTodayDTO = FoodTodayDTO.of(breakfast, lunch, dinner, totalNutrient, underNutrient);
 
         return ResponseEntity.status(HttpStatus.OK).body(foodTodayDTO);
     }
@@ -59,10 +58,14 @@ public class FoodController {
         if(type.equals("breakfast")) {
             try {
                 Breakfast breakfast = foodService.saveBreakfastFood(account, foodDto);
+                BreakfastNutrient breakfastNutrient = nutrientService.saveBreakfastNutrient(account, breakfast);
+                breakfast.setBreakfastNutrient(breakfastNutrient);
                 Nutrient totalNutrient = nutrientService.getTodayTotalNutrient(account);
+                Nutrient underNutrient = nutrientService.getUnderNutrient(account, totalNutrient);
 
-                return ResponseEntity.ok().body(FoodDTO.BreakfastToFoodDTOConvertor(breakfast, totalNutrient));
+                return ResponseEntity.ok().body(FoodDTO.BreakfastToFoodDTOConvertor(breakfast, totalNutrient, underNutrient));
             } catch (Exception e){
+                e.printStackTrace();
                 return ResponseEntity.internalServerError().build();
             }
         } else if(type.equals("lunch")){

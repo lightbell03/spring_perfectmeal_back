@@ -48,6 +48,8 @@ public class AccountService {
                 .email(accountSignupDTO.getEmail())
                 .gender(accountSignupDTO.getGender())
                 .age(accountSignupDTO.getAge())
+                .weight(accountSignupDTO.getWeight())
+                .height(accountSignupDTO.getHeight())
                 .password(passwordEncoder.encode(accountSignupDTO.getPassword()))
                 .build();
 

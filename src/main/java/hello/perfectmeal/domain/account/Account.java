@@ -19,10 +19,13 @@ public class Account {
     private String name;
     private String email;
     private String password;
-    private int age;
 
     @Enumerated(EnumType.STRING)
     private Gender gender;
+
+    private int age;
+    private Double height;
+    private Double weight;
 
     @Builder.Default
     private String role = "ROLE_USER";

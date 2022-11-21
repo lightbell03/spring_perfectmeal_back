@@ -25,7 +25,6 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-@Transactional
 class NutrientServiceTest {
 
     @Autowired
@@ -40,6 +39,7 @@ class NutrientServiceTest {
     Account account;
 
     @BeforeEach
+    @Transactional
     public void beforeEach() {
         String email = "email@email.com";
 
@@ -96,10 +96,9 @@ class NutrientServiceTest {
 
         Nutrient nutrient = nutrientService.getTodayTotalNutrient(account);
 
-        double sum = breakfastNutrient.getNutrient().getFood_Weight() +
-                lunchNutrient.getNutrient().getFood_Weight() +
-                dinnerNutrient.getNutrient().getFood_Weight();
-
-        assertThat(nutrient.getFood_Weight()).isEqualTo(sum);
+        double sum = breakfastNutrient.getNutrient().getEnergy_Qy() +
+                lunchNutrient.getNutrient().getEnergy_Qy() +
+                dinnerNutrient.getNutrient().getEnergy_Qy();
+        assertThat(nutrient.getEnergy_Qy()).isEqualTo(sum);
     }
 }

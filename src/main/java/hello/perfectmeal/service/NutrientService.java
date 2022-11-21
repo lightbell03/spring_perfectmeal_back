@@ -1,13 +1,11 @@
 package hello.perfectmeal.service;
 
 import hello.perfectmeal.domain.account.Account;
+import hello.perfectmeal.domain.account.Gender;
 import hello.perfectmeal.domain.food.Breakfast;
 import hello.perfectmeal.domain.food.Dinner;
 import hello.perfectmeal.domain.food.Lunch;
-import hello.perfectmeal.domain.nutrient.BreakfastNutrient;
-import hello.perfectmeal.domain.nutrient.DinnerNutrient;
-import hello.perfectmeal.domain.nutrient.LunchNutrient;
-import hello.perfectmeal.domain.nutrient.Nutrient;
+import hello.perfectmeal.domain.nutrient.*;
 import hello.perfectmeal.repository.nutrient.BreakfastNutrientRepository;
 import hello.perfectmeal.repository.nutrient.DinnerNutrientRepository;
 import hello.perfectmeal.repository.nutrient.LunchNutrientRepository;
@@ -112,8 +110,8 @@ public class NutrientService {
                 fieldVariable.setAccessible(true);
 
                 double nutrientValue = saveFieldVariable.getDouble(nutrient) + fieldVariable.getDouble(n);
-
-                saveFieldVariable.setDouble(nutrient, nutrientValue);
+                double saveNutrientValue = Math.round(nutrientValue * 100) / 100;
+                saveFieldVariable.setDouble(nutrient, saveNutrientValue);
             }
         }
 
@@ -182,8 +180,6 @@ public class NutrientService {
 
     public Nutrient getTodayTotalNutrient(Account account) throws Exception {
         Breakfast breakfast = foodService.getTodayBreakfast(account);
-        log.info("id = {}", breakfast.getId());
-        log.info("test = {}", breakfast.getBreakfastNutrient().getNutrient().getFood_Weight());
         Nutrient breakfastNutrient = breakfast == null ? new Nutrient() : breakfast.getBreakfastNutrient().getNutrient();
 
         Lunch lunch = foodService.getTodayLunch(account);
@@ -209,4 +205,15 @@ public class NutrientService {
         return nutrient;
     }
 
+    public Nutrient getUnderNutrient(Account account, Nutrient todayTotalNutrient) {
+        Nutrient nutrient = new Nutrient();
+        if(account.getGender().equals(Gender.MAN)){
+            nutrient = UnderNutrient.getManUnderNutrient(account, todayTotalNutrient);
+        }
+        else if(account.getGender().equals(Gender.WOMAN)){
+            nutrient = UnderNutrient.getWomanUnderNutrient(account, todayTotalNutrient);
+        }
+
+        return nutrient;
+    }
 }

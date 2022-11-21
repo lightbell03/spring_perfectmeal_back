@@ -21,7 +21,7 @@ public class FoodDTO {
     private Nutrient totalNutrient;
     private Nutrient underNutrient;
 
-    public static FoodDTO BreakfastToFoodDTOConvertor(Breakfast breakfast, Nutrient totalNutrient){
+    public static FoodDTO BreakfastToFoodDTOConvertor(Breakfast breakfast, Nutrient totalNutrient, Nutrient underNutrient){
         if(breakfast == null) return null;
 
         FoodDTO foodDTO = new FoodDTO();
@@ -29,6 +29,7 @@ public class FoodDTO {
         foodDTO.foodSet = breakfast.getFoodSet();
         foodDTO.nutrient = breakfast.getBreakfastNutrient().getNutrient();
         foodDTO.totalNutrient = totalNutrient;
+        foodDTO.underNutrient = underNutrient;
 
         return foodDTO;
     }

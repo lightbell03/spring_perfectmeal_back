@@ -14,5 +14,7 @@ public class AccountSignupDTO {
     private String email;
     private String password;
     private int age;
+    private Double weight;
+    private Double height;
     private Gender gender;
 }

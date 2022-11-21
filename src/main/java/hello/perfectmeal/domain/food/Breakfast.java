@@ -35,8 +35,9 @@ public class Breakfast {
             joinColumns = @JoinColumn(name = "breakfast_id"))
     private Set<String> foodSet = new HashSet<>();
 
+    @Builder.Default
     @OneToOne(mappedBy = "breakfast", cascade = CascadeType.ALL, orphanRemoval = true)
-    private BreakfastNutrient breakfastNutrient;
+    private BreakfastNutrient breakfastNutrient = new BreakfastNutrient();
 
     private LocalDateTime date;
 

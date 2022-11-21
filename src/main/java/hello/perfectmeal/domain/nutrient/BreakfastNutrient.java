@@ -24,7 +24,7 @@ public class BreakfastNutrient {
     @JoinColumn(name = "account_id")
     private Account account;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne
     @JoinColumn(name = "breakfast_id")
     private Breakfast breakfast;
 
