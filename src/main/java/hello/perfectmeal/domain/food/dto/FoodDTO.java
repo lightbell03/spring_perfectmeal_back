@@ -34,21 +34,27 @@ public class FoodDTO {
         return foodDTO;
     }
 
-    public static FoodDTO LunchToFoodDTOConvertor(Lunch lunch){
+    public static FoodDTO LunchToFoodDTOConvertor(Lunch lunch, Nutrient totalNutrient, Nutrient underNutrient){
         if(lunch == null) return null;
         FoodDTO foodDTO = new FoodDTO();
         foodDTO.id = lunch.getId();
         foodDTO.foodSet = lunch.getFoodSet();
         foodDTO.nutrient = lunch.getLunchNutrient().getNutrient();
+        foodDTO.totalNutrient = totalNutrient;
+        foodDTO.underNutrient = underNutrient;
+
         return foodDTO;
     }
 
-    public static FoodDTO DinnerToFoodDTOConvertor(Dinner dinner){
+    public static FoodDTO DinnerToFoodDTOConvertor(Dinner dinner, Nutrient totalNutrient, Nutrient underNutrient){
         if(dinner == null) return null;
         FoodDTO foodDTO = new FoodDTO();
         foodDTO.id = dinner.getId();
         foodDTO.foodSet = dinner.getFoodSet();
         foodDTO.nutrient = dinner.getDinnerNutrient().getNutrient();
+        foodDTO.totalNutrient = totalNutrient;
+        foodDTO.underNutrient = underNutrient;
+
         return foodDTO;
     }
 }

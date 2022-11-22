@@ -5,19 +5,18 @@ import hello.perfectmeal.domain.food.Breakfast;
 import hello.perfectmeal.domain.food.Dinner;
 import hello.perfectmeal.domain.food.Lunch;
 import hello.perfectmeal.domain.food.dto.FoodDTO;
-import hello.perfectmeal.domain.nutrient.BreakfastNutrient;
 import hello.perfectmeal.repository.food.BreakfastRepository;
 import hello.perfectmeal.repository.food.DinnerRepository;
 import hello.perfectmeal.repository.food.LunchRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 @Slf4j
 @Service
@@ -29,34 +28,40 @@ public class FoodService {
     private final LunchRepository lunchRepository;
     private final DinnerRepository dinnerRepository;
 
+    public Breakfast getBreakfast(Account account, String date){
+        LocalDate localDate = parseDate(date);
+        return breakfastRepository.findByAccountAndDate(account, localDate).orElse(null);
+    }
 
-    public Breakfast getTodayBreakfast(Account account) {
-        return breakfastRepository.findByAccountAndDateBetween(account, getStartTime(), getEndTime())
+    public Lunch getLunch(Account account, String date) {
+        LocalDate localDate = parseDate(date);
+        return lunchRepository.findByAccountAndDate(account, localDate)
                 .orElse(null);
     }
 
-    public Lunch getTodayLunch(Account account) {
-        return lunchRepository.findByAccountAndDateBetween(account, getStartTime(), getEndTime())
+    public Dinner getDinner(Account account, String date) {
+        LocalDate localDate = parseDate(date);
+        return dinnerRepository.findByAccountAndDate(account, localDate)
                 .orElse(null);
     }
 
-    public Dinner getTodayDinner(Account account) {
-        return dinnerRepository.findByAccountAndDateBetween(account, getStartTime(), getEndTime())
-                .orElse(null);
+    private LocalDateTime getStartTime(String date){
+        return LocalDateTime.of(parseDate(date).minusDays(1), LocalTime.of(0, 0, 0));
+    }
+    private LocalDateTime getEndTime(String date) {
+        return LocalDateTime.of(parseDate(date).now(), LocalTime.of(23, 59, 59));
     }
 
-    private LocalDateTime getStartTime(){
-        return LocalDateTime.of(LocalDate.now().minusDays(1), LocalTime.of(0, 0, 0));
-    }
-    private LocalDateTime getEndTime() {
-        return LocalDateTime.of(LocalDate.now(), LocalTime.of(23, 59, 59));
+    private LocalDate parseDate(String date) {
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return LocalDate.parse(date, dateTimeFormatter);
     }
 
     @Transactional
-    public Breakfast saveBreakfastFood(Account account, FoodDTO foodDTO) throws Exception {
+    public Breakfast saveBreakfast(Account account, FoodDTO foodDTO, String date) throws Exception {
         Breakfast breakfast = Breakfast.builder()
                 .foodSet(foodDTO.getFoodSet())
-                .date(LocalDateTime.now())
+                .date(parseDate(date))
                 .account(account)
                 .build();
         Breakfast saveBreakfast = breakfastRepository.save(breakfast);
@@ -65,11 +70,11 @@ public class FoodService {
     }
 
     @Transactional
-    public Lunch saveLunch(Account account, FoodDTO foodDTO) {
+    public Lunch saveLunch(Account account, FoodDTO foodDTO, String date) {
 
         Lunch lunch = Lunch.builder()
                 .foodSet(foodDTO.getFoodSet())
-                .date(LocalDateTime.now())
+                .date(parseDate(date))
                 .account(account)
                 .build();
 
@@ -77,10 +82,10 @@ public class FoodService {
     }
 
     @Transactional
-    public Dinner saveDinner(Account account, FoodDTO foodDTO){
+    public Dinner saveDinner(Account account, FoodDTO foodDTO, String date){
         Dinner dinner = Dinner.builder()
                 .foodSet(foodDTO.getFoodSet())
-                .date(LocalDateTime.now())
+                .date(parseDate(date))
                 .account(account)
                 .build();
 

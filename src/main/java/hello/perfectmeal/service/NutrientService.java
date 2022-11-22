@@ -178,14 +178,14 @@ public class NutrientService {
         return Double.valueOf(nValue.getNodeValue());
     }
 
-    public Nutrient getTodayTotalNutrient(Account account) throws Exception {
-        Breakfast breakfast = foodService.getTodayBreakfast(account);
+    public Nutrient getTotalNutrient(Account account, String date) throws Exception {
+        Breakfast breakfast = foodService.getBreakfast(account, date);
         Nutrient breakfastNutrient = breakfast == null ? new Nutrient() : breakfast.getBreakfastNutrient().getNutrient();
 
-        Lunch lunch = foodService.getTodayLunch(account);
+        Lunch lunch = foodService.getLunch(account, date);
         Nutrient lunchNutrient = lunch == null ? new Nutrient() : lunch.getLunchNutrient().getNutrient();
 
-        Dinner dinner = foodService.getTodayDinner(account);
+        Dinner dinner = foodService.getDinner(account, date);
         Nutrient dinnerNutrient = dinner == null ? new Nutrient() : dinner.getDinnerNutrient().getNutrient();
 
         Nutrient nutrient = new Nutrient();

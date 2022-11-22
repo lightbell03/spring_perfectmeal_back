@@ -19,6 +19,9 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 
 import javax.persistence.EntityManager;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -75,8 +78,8 @@ class FoodServiceTest {
         breakfastFoodDTO.setFoodSet(set);
 
         Breakfast breakfast = foodService.saveBreakfastFood(account, breakfastFoodDTO);
-
-        Breakfast findBreakfast = foodService.getTodayBreakfast(account);
+        String date = "2022-11-22";
+        Breakfast findBreakfast = foodService.getBreakfast(account, date);
 
         assertThat(breakfast.getId()).isEqualTo(findBreakfast.getId());
     }

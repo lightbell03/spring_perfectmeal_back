@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -38,7 +39,7 @@ public class Lunch {
     @OneToOne(mappedBy = "lunch", cascade = CascadeType.ALL, orphanRemoval = true)
     private LunchNutrient lunchNutrient;
 
-    private LocalDateTime date;
+    private LocalDate date;
 
     public void setLunchNutrient(LunchNutrient lunchNutrient){
         this.lunchNutrient = lunchNutrient;
