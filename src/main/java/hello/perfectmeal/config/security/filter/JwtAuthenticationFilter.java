@@ -1,5 +1,6 @@
 package hello.perfectmeal.config.security.filter;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import hello.perfectmeal.config.security.provider.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,8 +41,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 } else if (flag == 2) {
                     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
                     response.setStatus(HttpStatus.FORBIDDEN.value());
-                    PrintWriter out = response.getWriter();
-                    out.println("expired access token");
                 } else {
                     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
                     response.setStatus(HttpStatus.FORBIDDEN.value());

@@ -37,6 +37,7 @@ class NutrientServiceTest {
     AccountService accountService;
 
     Account account;
+    String date;
 
     @BeforeEach
     @Transactional
@@ -53,6 +54,7 @@ class NutrientServiceTest {
 
         accountService.signup(accountSignupDTO);
         account = accountRepository.findByEmail(email).get();
+        date = "2022-11-23";
     }
 
 
@@ -66,7 +68,7 @@ class NutrientServiceTest {
                 .foodSet(foodSet)
                 .build();
 
-        Breakfast breakfast = foodService.saveBreakfastFood(account, foodDTO);
+        Breakfast breakfast = foodService.saveBreakfast(account, foodDTO, date);
         BreakfastNutrient breakfastNutrient = nutrientService.saveBreakfastNutrient(account, breakfast);
 
         assertThat(breakfastNutrient.getBreakfast().getId()).isEqualTo(breakfast.getId());
@@ -82,19 +84,19 @@ class NutrientServiceTest {
                 .foodSet(foodSet)
                 .build();
 
-        Breakfast breakfast = foodService.saveBreakfastFood(account, foodDTO);
+        Breakfast breakfast = foodService.saveBreakfast(account, foodDTO, date);
         BreakfastNutrient breakfastNutrient = nutrientService.saveBreakfastNutrient(account, breakfast);
         breakfast.setBreakfastNutrient(breakfastNutrient);
 
-        Lunch lunch = foodService.saveLunch(account, foodDTO);
+        Lunch lunch = foodService.saveLunch(account, foodDTO, date);
         LunchNutrient lunchNutrient = nutrientService.saveLunchNutrient(account, lunch);
         lunch.setLunchNutrient(lunchNutrient);
 
-        Dinner dinner = foodService.saveDinner(account, foodDTO);
+        Dinner dinner = foodService.saveDinner(account, foodDTO, date);
         DinnerNutrient dinnerNutrient = nutrientService.saveDinnerNutrient(account, dinner);
         dinner.setDinnerNutrient(dinnerNutrient);
 
-        Nutrient nutrient = nutrientService.getTodayTotalNutrient(account);
+        Nutrient nutrient = nutrientService.getTotalNutrient(account, date);
 
         double sum = breakfastNutrient.getNutrient().getEnergy_Qy() +
                 lunchNutrient.getNutrient().getEnergy_Qy() +

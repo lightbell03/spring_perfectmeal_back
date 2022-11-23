@@ -28,6 +28,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -61,6 +62,7 @@ class FoodControllerTest {
     String accessToken;
     String refreshToken;
     Set<String> foodSet;
+    String date;
 
     @BeforeEach
     public void beforeEach() {
@@ -81,6 +83,7 @@ class FoodControllerTest {
         foodSet.add("pizza");
         foodSet.add("rice");
         foodSet.add("chicken");
+        date = "2022-11-23";
     }
 
     @Test
@@ -142,15 +145,16 @@ class FoodControllerTest {
     public void getTodayFood() throws Exception {
         FoodDTO breakfastFoodDTO = new FoodDTO();
         breakfastFoodDTO.setFoodSet(foodSet);
-        foodService.saveBreakfastFood(account, breakfastFoodDTO);
+
+        foodService.saveBreakfast(account, breakfastFoodDTO, date);
 
         FoodDTO lunchFoodDTO = new FoodDTO();
         lunchFoodDTO.setFoodSet(foodSet);
-        foodService.saveLunch(account, lunchFoodDTO);
+        foodService.saveLunch(account, lunchFoodDTO, date);
 
         FoodDTO dinnerFoodDTO = new FoodDTO();
         dinnerFoodDTO.setFoodSet(foodSet);
-        foodService.saveDinner(account, dinnerFoodDTO);
+        foodService.saveDinner(account, dinnerFoodDTO, date);
 
         mockMvc.perform(get("/api/foods")
                         .header("Authorization", "Bearer:" + accessToken)
@@ -168,11 +172,11 @@ class FoodControllerTest {
     public void getTodayFoodWithLunchIsNull() throws Exception {
         FoodDTO breakfastFoodDTO = new FoodDTO();
         breakfastFoodDTO.setFoodSet(foodSet);
-        foodService.saveBreakfastFood(account, breakfastFoodDTO);
+        foodService.saveBreakfast(account, breakfastFoodDTO, date);
 
         FoodDTO dinnerFoodDTO = new FoodDTO();
         dinnerFoodDTO.setFoodSet(foodSet);
-        foodService.saveDinner(account, dinnerFoodDTO);
+        foodService.saveDinner(account, dinnerFoodDTO, date);
 
         mockMvc.perform(get("/api/foods")
                         .header("Authorization", "Bearer:" + accessToken)

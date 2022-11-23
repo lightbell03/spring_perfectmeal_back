@@ -1,11 +1,13 @@
 package hello.perfectmeal.controller;
 
+import hello.perfectmeal.domain.account.Account;
 import hello.perfectmeal.domain.account.dto.AccountLoginReqDTO;
 import hello.perfectmeal.domain.account.dto.AccountSignupDTO;
 import hello.perfectmeal.domain.jwt.dto.TokenDTO;
 import hello.perfectmeal.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -34,8 +36,27 @@ public class AccountController {
     public ResponseEntity signup(
             @RequestBody AccountSignupDTO accountSignupDTO
     ) {
-        String email = accountService.signup(accountSignupDTO);
+        Account account = accountService.signup(accountSignupDTO);
 
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/api/auth/reload")
+    public ResponseEntity reload(
+        @RequestBody TokenDTO tokenDTO
+    ){
+        log.info("refresh Token = {}", tokenDTO.getRefreshToken());
+        try {
+            String accessToken = accountService.reload(tokenDTO);
+            TokenDTO reloadTokenDTO = TokenDTO.builder()
+                    .accessToken(accessToken)
+                    .refreshToken(tokenDTO.getRefreshToken())
+                    .build();
+
+            return ResponseEntity.ok().body(reloadTokenDTO);
+        }
+        catch (Exception exception){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
     }
 }

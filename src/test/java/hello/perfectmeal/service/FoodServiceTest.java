@@ -39,6 +39,7 @@ class FoodServiceTest {
     FoodService foodService;
     Account account;
     Set<String> set = new HashSet<>();
+    String date;
 
     @BeforeEach
     public void beforeEach() {
@@ -58,6 +59,7 @@ class FoodServiceTest {
         set.add("감자");
 //        set.add("김치찌개");
 //        set.add("햄버거");
+        date = "2022-11-23";
     }
 
     @Test
@@ -66,7 +68,7 @@ class FoodServiceTest {
         FoodDTO breakfastFoodDTO = new FoodDTO();
         breakfastFoodDTO.setFoodSet(set);
 
-        Breakfast breakfast = foodService.saveBreakfastFood(account, breakfastFoodDTO);
+        Breakfast breakfast = foodService.saveBreakfast(account, breakfastFoodDTO, date);
 
         assertThat(breakfast.getFoodSet()).isEqualTo(set);
     }
@@ -77,7 +79,7 @@ class FoodServiceTest {
         FoodDTO breakfastFoodDTO = new FoodDTO();
         breakfastFoodDTO.setFoodSet(set);
 
-        Breakfast breakfast = foodService.saveBreakfastFood(account, breakfastFoodDTO);
+        Breakfast breakfast = foodService.saveBreakfast(account, breakfastFoodDTO, date);
         String date = "2022-11-22";
         Breakfast findBreakfast = foodService.getBreakfast(account, date);
 
@@ -90,7 +92,7 @@ class FoodServiceTest {
         FoodDTO lunchFoodDTO = new FoodDTO();
         lunchFoodDTO.setFoodSet(set);
 
-        Lunch lunch = foodService.saveLunch(account, lunchFoodDTO);
+        Lunch lunch = foodService.saveLunch(account, lunchFoodDTO, date);
 
         assertThat(lunch.getFoodSet()).isEqualTo(set);
     }
@@ -101,8 +103,8 @@ class FoodServiceTest {
         FoodDTO lunchFoodDTO = new FoodDTO();
         lunchFoodDTO.setFoodSet(set);
 
-        Lunch lunch = foodService.saveLunch(account, lunchFoodDTO);
-        Lunch findLunch = foodService.getTodayLunch(account);
+        Lunch lunch = foodService.saveLunch(account, lunchFoodDTO, date);
+        Lunch findLunch = foodService.getLunch(account, date);
 
         assertThat(lunch.getId()).isEqualTo(findLunch.getId());
     }
@@ -113,7 +115,7 @@ class FoodServiceTest {
         FoodDTO dinnerFoodDTO = new FoodDTO();
         dinnerFoodDTO.setFoodSet(set);
 
-        Dinner dinner = foodService.saveDinner(account, dinnerFoodDTO);
+        Dinner dinner = foodService.saveDinner(account, dinnerFoodDTO, date);
 
         assertThat(dinner.getFoodSet()).isEqualTo(set);
     }
@@ -124,8 +126,8 @@ class FoodServiceTest {
         FoodDTO dinnerFoodDTO = new FoodDTO();
         dinnerFoodDTO.setFoodSet(set);
 
-        Dinner dinner = foodService.saveDinner(account, dinnerFoodDTO);
-        Dinner findDinner = foodService.getTodayDinner(account);
+        Dinner dinner = foodService.saveDinner(account, dinnerFoodDTO, date);
+        Dinner findDinner = foodService.getDinner(account, date);
 
         assertThat(dinner.getId()).isEqualTo(findDinner.getId());
     }

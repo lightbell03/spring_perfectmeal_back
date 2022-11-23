@@ -45,13 +45,6 @@ public class FoodService {
                 .orElse(null);
     }
 
-    private LocalDateTime getStartTime(String date){
-        return LocalDateTime.of(parseDate(date).minusDays(1), LocalTime.of(0, 0, 0));
-    }
-    private LocalDateTime getEndTime(String date) {
-        return LocalDateTime.of(parseDate(date).now(), LocalTime.of(23, 59, 59));
-    }
-
     private LocalDate parseDate(String date) {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         return LocalDate.parse(date, dateTimeFormatter);
