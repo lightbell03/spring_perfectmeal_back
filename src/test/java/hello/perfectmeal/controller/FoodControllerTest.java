@@ -9,6 +9,7 @@ import hello.perfectmeal.domain.food.Breakfast;
 import hello.perfectmeal.domain.food.Dinner;
 import hello.perfectmeal.domain.food.Lunch;
 import hello.perfectmeal.domain.food.dto.FoodDTO;
+import hello.perfectmeal.domain.food.dto.PhotoDTO;
 import hello.perfectmeal.domain.nutrient.BreakfastNutrient;
 import hello.perfectmeal.domain.nutrient.DinnerNutrient;
 import hello.perfectmeal.domain.nutrient.LunchNutrient;
@@ -28,7 +29,12 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Base64;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -187,6 +193,50 @@ class FoodControllerTest {
                 .andExpect(jsonPath("lunch").doesNotExist())
                 .andExpect(jsonPath("dinner").exists())
         ;
+    }
+
+    @Test
+    public void threadTest() throws IOException {
+        File file = new File(System.getProperty("user.dir") + "/testimage/image.jpg");
+        FileInputStream fileInputStream = new FileInputStream(file);
+        byte[] bytes = new byte[(int) file.length()];
+        fileInputStream.read(bytes);
+        String base64String = Base64.getEncoder().encodeToString(bytes);
+
+        PhotoDTO photoDTO = new PhotoDTO();
+        photoDTO.setImgsource("," + base64String);
+
+        Runnable runnable1 = new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mockMvc.perform(post("/api/photo")
+                                    .header("Authorization", "Bearer:" + accessToken)
+                                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+                                    .content(objectMapper.writeValueAsString(photoDTO)))
+                            .andExpect(status().isOk());
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        };
+        Runnable runnable2 = new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mockMvc.perform(post("/api/photo")
+                                    .header("Authorization", "Bearer:" + accessToken)
+                                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+                                    .content(objectMapper.writeValueAsString(photoDTO)))
+                            .andExpect(status().isOk());
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        };
+
+        runnable1.run();
+        runnable2.run();
     }
 
     @Test

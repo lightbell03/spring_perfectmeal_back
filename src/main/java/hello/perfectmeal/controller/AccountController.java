@@ -1,6 +1,7 @@
 package hello.perfectmeal.controller;
 
 import hello.perfectmeal.domain.account.Account;
+import hello.perfectmeal.domain.account.dto.AccountDTO;
 import hello.perfectmeal.domain.account.dto.AccountLoginReqDTO;
 import hello.perfectmeal.domain.account.dto.AccountSignupDTO;
 import hello.perfectmeal.domain.jwt.dto.TokenDTO;
@@ -38,7 +39,7 @@ public class AccountController {
     ) {
         Account account = accountService.signup(accountSignupDTO);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(AccountDTO.AccountToAccountDTO(account));
     }
 
     @PostMapping("/api/auth/reload")

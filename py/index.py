@@ -16,4 +16,4 @@ model = torch.hub.load('ultralytics/yolov5', 'yolov5s', _verbose=False)
 results = model([image], size=640) # batch of images
 # print(results)
 
-print("감자")
+print("감자전")

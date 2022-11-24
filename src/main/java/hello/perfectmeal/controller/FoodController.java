@@ -58,7 +58,6 @@ public class FoodController {
     ) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Account account = (Account) authentication.getPrincipal();
-
         try {
             if (type.equals("breakfast")) {
                 Breakfast breakfast = foodService.saveBreakfast(account, foodDTO, date);
