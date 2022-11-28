@@ -12,9 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @Controller
@@ -33,6 +31,15 @@ public class AccountController {
         return ResponseEntity.ok(tokenDTO);
     }
 
+    @DeleteMapping("/api/auth/logout")
+    public ResponseEntity logout(
+            @RequestBody AccountDTO accountDTO
+    ) {
+        accountService.logout(accountDTO);
+
+        return ResponseEntity.ok().build();
+    }
+
     @PostMapping("/api/auth/signup")
     public ResponseEntity signup(
             @RequestBody AccountSignupDTO accountSignupDTO
@@ -48,13 +55,9 @@ public class AccountController {
     ){
         log.info("refresh Token = {}", tokenDTO.getRefreshToken());
         try {
-            String accessToken = accountService.reload(tokenDTO);
-            TokenDTO reloadTokenDTO = TokenDTO.builder()
-                    .accessToken(accessToken)
-                    .refreshToken(tokenDTO.getRefreshToken())
-                    .build();
+            TokenDTO reissuedTokenDto = accountService.reload(tokenDTO);
 
-            return ResponseEntity.ok().body(reloadTokenDTO);
+            return ResponseEntity.ok().body(reissuedTokenDto);
         }
         catch (Exception exception){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();

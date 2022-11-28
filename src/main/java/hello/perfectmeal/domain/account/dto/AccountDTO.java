@@ -1,6 +1,7 @@
 package hello.perfectmeal.domain.account.dto;
 
 import hello.perfectmeal.domain.account.Account;
+import hello.perfectmeal.domain.jwt.dto.TokenDTO;
 import lombok.Getter;
 
 @Getter

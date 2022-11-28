@@ -1,23 +1,24 @@
 package hello.perfectmeal.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import hello.perfectmeal.config.security.provider.JwtTokenProvider;
-import hello.perfectmeal.config.security.service.AccountContext;
 import hello.perfectmeal.config.security.token.JwtAuthenticationToken;
 import hello.perfectmeal.domain.account.Account;
+import hello.perfectmeal.domain.account.dto.AccountDTO;
 import hello.perfectmeal.domain.account.dto.AccountLoginReqDTO;
 import hello.perfectmeal.domain.account.dto.AccountSignupDTO;
-import hello.perfectmeal.domain.jwt.Token;
 import hello.perfectmeal.domain.jwt.dto.TokenDTO;
 import hello.perfectmeal.repository.AccountRepository;
-import hello.perfectmeal.repository.TokenRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
+
+import javax.persistence.EntityNotFoundException;
 
 
 @Slf4j
@@ -26,11 +27,14 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class AccountService {
 
-    private final TokenRepository tokenRepository;
     private final PasswordEncoder passwordEncoder;
     private final AccountRepository accountRepository;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
+    private final RedisService redisService;
+
+    @Value("${jwt.refresh-token-expire-time}")
+    private Long refreshTokenExpireTime;
 
     @Transactional
     public TokenDTO login(AccountLoginReqDTO accountReqDTO) {
@@ -42,12 +46,7 @@ public class AccountService {
         String accessToken = jwtTokenProvider.createAccessToken(email);
         String refreshToken = jwtTokenProvider.createRefreshToken(email);
 
-        Token token = Token.builder()
-                .account(account)
-                .accessToken(accessToken)
-                .refreshToken(refreshToken)
-                .build();
-        tokenRepository.save(token);
+        redisService.setRefreshToken(email, refreshToken, refreshTokenExpireTime);
 
         return jwtTokenProvider.createTokenDto(accessToken, refreshToken);
     }
@@ -68,19 +67,33 @@ public class AccountService {
         return saveAccount;
     }
 
-    @Transactional
-    public String reload(TokenDTO tokenDTO) throws Exception{
-        Token token = tokenRepository.findByRefreshToken(tokenDTO.getRefreshToken()).orElseThrow(() -> new RuntimeException("no refresh token"));
-
-        int flag = jwtTokenProvider.validateToken(token.getRefreshToken());
+    public TokenDTO reload(TokenDTO tokenDTO) throws Exception{
+        int flag = jwtTokenProvider.validateToken(tokenDTO.getRefreshToken());
 
         if(flag == 1){
-            String accessToken = jwtTokenProvider.createAccessToken(token.getAccount().getEmail());
-            token.setAccessToken(accessToken);
-            return accessToken;
+            String email = jwtTokenProvider.getEmailByToken(tokenDTO.getRefreshToken());
+            String refreshToken = (String) redisService.getRefreshToken(email);
+            if(ObjectUtils.isEmpty(refreshToken)){
+                throw new RuntimeException("not exist refreshToken");
+            }
+
+            if(!refreshToken.equals(tokenDTO.getRefreshToken())){
+                throw new RuntimeException("invalid refresh token");
+            }
+
+            String reissuedAccessToken = jwtTokenProvider.createAccessToken(email);
+            String reissuedRefreshToken = jwtTokenProvider.createRefreshToken(email);
+            redisService.setRefreshToken(email, refreshToken, refreshTokenExpireTime);
+
+            TokenDTO reissuedTokenDto = jwtTokenProvider.createTokenDto(reissuedAccessToken, reissuedRefreshToken);
+            return reissuedTokenDto;
         }
         else {
             throw new RuntimeException("refresh token expired");
         }
+    }
+
+    public void logout(AccountDTO accountDTO) {
+        Account account = accountRepository.findByEmail(accountDTO.getEmail()).orElseThrow(() -> new EntityNotFoundException());
     }
 }

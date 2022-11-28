@@ -2,6 +2,7 @@ package hello.perfectmeal.config.security.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hello.perfectmeal.config.security.provider.JwtTokenProvider;
+import hello.perfectmeal.service.RedisService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
