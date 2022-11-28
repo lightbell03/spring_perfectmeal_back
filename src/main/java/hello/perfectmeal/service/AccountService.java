@@ -1,5 +1,6 @@
 package hello.perfectmeal.service;
 
+import hello.perfectmeal.config.exception.ForbiddenException;
 import hello.perfectmeal.config.security.provider.JwtTokenProvider;
 import hello.perfectmeal.config.security.token.JwtAuthenticationToken;
 import hello.perfectmeal.domain.account.Account;
@@ -35,6 +36,8 @@ public class AccountService {
 
     @Value("${jwt.refresh-token-expire-time}")
     private Long refreshTokenExpireTime;
+    @Value("${jwt.access-token-expire-time}")
+    private Long accessTokenExpireTime;
 
     @Transactional
     public TokenDTO login(AccountLoginReqDTO accountReqDTO) {
@@ -67,18 +70,22 @@ public class AccountService {
         return saveAccount;
     }
 
-    public TokenDTO reload(TokenDTO tokenDTO) throws Exception{
+    public TokenDTO reload(TokenDTO tokenDTO) throws ForbiddenException{
         int flag = jwtTokenProvider.validateToken(tokenDTO.getRefreshToken());
 
         if(flag == 1){
             String email = jwtTokenProvider.getEmailByToken(tokenDTO.getRefreshToken());
             String refreshToken = (String) redisService.getRefreshToken(email);
+
+            if(redisService.hasKeyBlackList(refreshToken)){
+                throw new ForbiddenException("logout user");
+            }
             if(ObjectUtils.isEmpty(refreshToken)){
-                throw new RuntimeException("not exist refreshToken");
+                throw new ForbiddenException("not exist refreshToken");
             }
 
             if(!refreshToken.equals(tokenDTO.getRefreshToken())){
-                throw new RuntimeException("invalid refresh token");
+                throw new ForbiddenException("invalid refresh token");
             }
 
             String reissuedAccessToken = jwtTokenProvider.createAccessToken(email);
@@ -89,11 +96,12 @@ public class AccountService {
             return reissuedTokenDto;
         }
         else {
-            throw new RuntimeException("refresh token expired");
+            throw new ForbiddenException("refresh token expired");
         }
     }
 
-    public void logout(AccountDTO accountDTO) {
-        Account account = accountRepository.findByEmail(accountDTO.getEmail()).orElseThrow(() -> new EntityNotFoundException());
+    public void logout(TokenDTO tokenDTO) {
+        redisService.setBlackList(tokenDTO.getAccessToken(), "accessToken", accessTokenExpireTime);
+        redisService.setBlackList(tokenDTO.getRefreshToken(), "refreshToken", refreshTokenExpireTime);
     }
 }

@@ -18,6 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -169,6 +170,39 @@ class AccountControllerTest {
         mockMvc.perform(get("/api/foods")
                         .param("date", "2022-11-23")
                         .header("Authorization", "Bearer:" + token.getAccessToken())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("logout")
+    public void logoutTest() throws Exception {
+        String email = "email@email.com";
+        String pass = "pass";
+        AccountSignupDTO accountSignupDTO = AccountSignupDTO.builder()
+                .email(email)
+                .password(pass)
+                .name("name")
+                .age(20)
+                .weight(70.0)
+                .height((170.0))
+                .gender(Gender.MAN)
+                .build();
+        Account account = accountService.signup(accountSignupDTO);
+
+        AccountLoginReqDTO accountLoginReqDTO = AccountLoginReqDTO.builder()
+                .email(email)
+                .password(pass)
+                .build();
+
+        TokenDTO token = accountService.login(accountLoginReqDTO);
+
+        accountService.logout(token);
+
+        mockMvc.perform(get("/api/foods")
+                        .param("date", "2022-11-23")
+                        .header("Authorization", "Bearer: " + token.getAccessToken())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
     }

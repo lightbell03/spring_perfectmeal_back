@@ -4,6 +4,7 @@ import hello.perfectmeal.config.security.filter.JwtAuthenticationFilter;
 import hello.perfectmeal.config.security.provider.JwtAuthenticationProvider;
 import hello.perfectmeal.config.security.provider.JwtTokenProvider;
 import hello.perfectmeal.config.security.service.AccountDetailsService;
+import hello.perfectmeal.service.RedisService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,6 +23,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
     private final JwtTokenProvider jwtTokenProvider;
     private final AccountDetailsService accountDetailsService;
+    private final RedisService redisService;
     @Bean
     public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();

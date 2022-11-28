@@ -4,6 +4,7 @@ import hello.perfectmeal.config.security.service.AccountContext;
 import hello.perfectmeal.config.security.token.JwtAuthenticationToken;
 import hello.perfectmeal.domain.jwt.dto.TokenDTO;
 import hello.perfectmeal.config.security.service.AccountDetailsService;
+import hello.perfectmeal.service.RedisService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -23,6 +24,7 @@ import java.util.Date;
 public class JwtTokenProvider {
 
     @Autowired AccountDetailsService accountDetailsService;
+    private final RedisService redisService;
     private final Long ACCESS_TOKEN_EXPIRE_TIME;
     private final Long REFRESH_TOKEN_EXPIRE_TIME;
     private final Key key;
@@ -30,10 +32,12 @@ public class JwtTokenProvider {
     public JwtTokenProvider(
         @Value("${jwt.secret}") String secretKey,
         @Value("${jwt.access-token-expire-time}") Long accessTime,
-        @Value("${jwt.refresh-token-expire-time}") Long refreshTime
+        @Value("${jwt.refresh-token-expire-time}") Long refreshTime,
+        RedisService redisService
     ){
         this.ACCESS_TOKEN_EXPIRE_TIME = accessTime;
         this.REFRESH_TOKEN_EXPIRE_TIME = refreshTime;
+        this.redisService = redisService;
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         key = Keys.hmacShaKeyFor(keyBytes);
     }
@@ -72,6 +76,9 @@ public class JwtTokenProvider {
     public int validateToken(String token) {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+            if(redisService.hasKeyBlackList(token)){
+                return 2;
+            }
             return 1;
         } catch (ExpiredJwtException exception){
             return 2;

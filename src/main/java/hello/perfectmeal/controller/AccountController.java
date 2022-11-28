@@ -1,5 +1,6 @@
 package hello.perfectmeal.controller;
 
+import hello.perfectmeal.config.exception.ForbiddenException;
 import hello.perfectmeal.domain.account.Account;
 import hello.perfectmeal.domain.account.dto.AccountDTO;
 import hello.perfectmeal.domain.account.dto.AccountLoginReqDTO;
@@ -31,11 +32,11 @@ public class AccountController {
         return ResponseEntity.ok(tokenDTO);
     }
 
-    @DeleteMapping("/api/auth/logout")
+    @PostMapping("/api/logout")
     public ResponseEntity logout(
-            @RequestBody AccountDTO accountDTO
+            @RequestBody TokenDTO tokenDTO
     ) {
-        accountService.logout(accountDTO);
+        accountService.logout(tokenDTO);
 
         return ResponseEntity.ok().build();
     }
@@ -53,14 +54,13 @@ public class AccountController {
     public ResponseEntity reload(
         @RequestBody TokenDTO tokenDTO
     ){
-        log.info("refresh Token = {}", tokenDTO.getRefreshToken());
         try {
             TokenDTO reissuedTokenDto = accountService.reload(tokenDTO);
 
             return ResponseEntity.ok().body(reissuedTokenDto);
         }
-        catch (Exception exception){
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        catch (ForbiddenException exception){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
 }

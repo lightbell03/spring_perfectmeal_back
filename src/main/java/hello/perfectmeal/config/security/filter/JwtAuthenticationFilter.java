@@ -22,8 +22,6 @@ import java.io.PrintWriter;
 @Slf4j
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-
-
     private final JwtTokenProvider jwtTokenProvider;
 
     @Override
